@@ -1,0 +1,48 @@
+#google-button {
+    margin: 20px;
+    margin-top: 25px;
+}
+
+.container {
+    margin: 20px;
+    background-color: rgba(66, 133, 244, 0.15);
+    padding: 10px;
+    border-radius: 10px;
+    width: 450px;
+    margin-top: 25px;
+    display: none;
+}
+
+img {
+    width: 56px;
+    border-radius: 50%;
+}
+
+.id,
+.email,
+.name {
+    display: inline-block;
+    font-family: 'Verdana';
+}
+
+.name {
+    font-size: 30px;
+    position: relative;
+    top: -16px;
+    margin-left: 5px;
+}
+
+lable {
+    font-family: 'Arial Black';
+}
+
+button {
+    display: block;
+    background-color: #4285F4;
+    border: 0px;
+    padding: 8px 20px;
+    color: white;
+    margin-top: 15px;
+    cursor: pointer;
+    outline: none;
+}
