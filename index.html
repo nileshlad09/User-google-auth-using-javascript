@@ -1,19 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-signin-client_id" content="1007947313665-2do870t31t1q99167ivrh1onms16sms4.apps.googleusercontent.com">
-    <title>Document</title>
+    <title>Google Signin</title>
+    <style>
+        #google-button {
+            margin: 20px;
+            margin-top: 25px;
+        }
+
+        .container {
+            margin: 20px;
+            background-color: rgba(66, 133, 244, 0.15);
+            padding: 10px;
+            border-radius: 10px;
+            width: 450px;
+            margin-top: 25px;
+            display: none;
+        }
+
+        img {
+            width: 56px;
+            border-radius: 50%;
+        }
+
+        .id,
+        .email,
+        .name {
+            display: inline-block;
+            font-family: 'Verdana';
+        }
+
+        .name {
+            font-size: 30px;
+            position: relative;
+            top: -16px;
+            margin-left: 5px;
+        }
+
+        lable {
+            font-family: 'Arial Black';
+        }
+
+        button {
+            display: block;
+            background-color: #4285F4;
+            border: 0px;
+            padding: 8px 20px;
+            color: white;
+            margin-top: 15px;
+            cursor: pointer;
+            outline: none;
+        }
+    </style>
 </head>
+
 <body>
+    <div id="google-button"></div>
     <div class="container">
-        <h1>google user auth using javascript 2</h1>
-        <div class="g-signin2" data-onsuccess="onSignIn"></div>
-        <h1 id="emailId"></h1>
+        <img src="" alt="profile" class="img">
+        <div class="name"></div>
+        <br>
+        <lable>ID: </lable>
+        <div class="id"></div>
+        <br>
+        <lable>Email: </lable>
+        <div class="email"></div>
+        <button onClick="signOut()">Sign Out</button>
     </div>
-    <script src="./app.js"></script>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script>
+        var googleButton = document.getElementById('google-button');
+        var container = document.getElementsByClassName('container')[0];
+        var img = document.getElementsByClassName('img')[0];
+        var getName = document.getElementsByClassName('name')[0];
+        var id = document.getElementsByClassName('id')[0];
+        var email = document.getElementsByClassName('email')[0];
+
+        // function to get response
+        function handleCredentialResponse(response) {
+            const responsePayload = decodeJwtResponse(response.credential);
+            img.src = responsePayload.picture;
+            getName.innerHTML = responsePayload.name;
+            id.innerHTML = responsePayload.sub;
+            email.innerHTML = responsePayload.email;
+            container.style.display = 'inline-block';
+            googleButton.style.display = 'none'
+        }
+
+        window.onload = function () {
+            google.accounts.id.initialize({
+                // replace your client id below
+                client_id: "1007947313665-2do870t31t1q99167ivrh1onms16sms4.apps.googleusercontent.com",
+                callback: handleCredentialResponse,
+                auto_select: true,
+                auto: true
+            });
+            google.accounts.id.renderButton(
+                document.getElementById("google-button"),
+                { theme: "filled_blue", size: "medium", width: '200' }  // customization attributes
+            );
+            // also display the One Tap dialog on right side
+            // important for auto login
+            google.accounts.id.prompt(); 
+        }
+
+        // function to decode the response.credential
+        function decodeJwtResponse(token) {
+            var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
+
+        function signOut() {
+            google.accounts.id.disableAutoSelect();
+            // do anything on logout
+            location.reload();
+        }
+    </script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </body>
+
 </html>
